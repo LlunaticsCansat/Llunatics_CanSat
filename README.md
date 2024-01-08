@@ -1,1 +1,1 @@
-# Llunatics_CanSat
+# Llunatics
