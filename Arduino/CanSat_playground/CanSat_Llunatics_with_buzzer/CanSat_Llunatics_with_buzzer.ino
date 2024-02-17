@@ -30,7 +30,10 @@ struct SensorData {               //Create a struct that contains all the dates
     float cansatBrightness = NAN;
 };
 
-const int RadioRX = 7;7
+SensorData lastSensorData;
+
+const int BuzzerPin = 8;
+const int RadioRX = 7;
 const int RadioTX = 6;
 
 TinyGPSPlus gps;
@@ -44,7 +47,8 @@ File dataFile;
 
 float latitude;
 float longitude;
-  
+float AccX, AccY, AccZ, GyroX, GyroY, GyroZ, MagX, MagY, MagZ, Yaw, Pitch, Roll, MpuTemp;
+
 unsigned long countTime = millis();
 
 void setup() {
@@ -68,8 +72,6 @@ void setup() {
 void loop() {
   
   unsigned long currentTime = millis();
-  
-  float AccX, AccY, AccZ, GyroX, GyroY, GyroZ, MagX, MagY, MagZ, Yaw, Pitch, Roll, MpuTemp;
 
   if (mpu.update()) {
     AccX = mpu.getAccX();
@@ -86,6 +88,7 @@ void loop() {
     Roll = mpu.getRoll();
     MpuTemp = mpu.getTemperature();
     }
+
 
   while (Serial.available() > 0) {
     
@@ -105,6 +108,18 @@ void loop() {
     backUpData(currentSensorData);
     sendData(currentSensorData);
     countTime = currentTime;
+    
+    float YawDiff = lastSensorData.Yaw - currentSensorData.Yaw;
+    float PitchDiff = lastSensorData.Pitch - currentSensorData.Pitch;
+    float RollDiff = lastSensorData.Roll - currentSensorData.Roll;
+
+    if(((-1 < YawDiff) && (YawDiff < 1)) && ((-1 < PitchDiff) && (PitchDiff < 1)) && ((-1 < RollDiff) && (RollDiff < 1)) ) {
+      digitalWrite(BuzzerPin,HIGH); //the buzzer will activate when the CanSat don't move (after landing)
+      }else{
+      digitalWrite(BuzzerPin,LOW);
+      }
+
+    lastSensorData =  currentSensorData;
   }
 
 }
