@@ -6,7 +6,7 @@ The team is constructed by 5 members, each one focused on the diferent aspects o
 
 # Components
 
-The microcontroller for our CanSat is an Arduino Nano
+The microcontroller for our CanSat is an Arduino Nano Every
 
 ## Sensors
 | Component Name | Arduino Pin                  | Module Pin                     |
@@ -46,6 +46,5 @@ The microcontroller for our CanSat is an Arduino Nano
 | cansatBrightness      | Float         | LDR sensor                | index between 0~1023  |
 
 # Progress
-The program have a serious problem, it exceeds 31% of Arduino storage space.
 
 Ground station GUI is not yet complete
