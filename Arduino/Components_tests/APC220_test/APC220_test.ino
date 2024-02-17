@@ -1,7 +1,7 @@
 /*
     APC220 CONECTION:
-             RXD: Arduino Pin 8
-             TXD: Arduino Pin 9
+             RXD: Arduino Pin 9
+             TXD: Arduino Pin 8
              GND: Arduino GND
              VCC: Arduino 5V
              
