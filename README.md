@@ -4,4 +4,5 @@ Llunatics is a CanSat, a mini satellite that is the size of a can, designed and 
 
 The team is constructed by 5 members, each one focused on the diferent aspects of the project.
 
-# Ground station GUI is not yet complete
+# Progress
+Ground station GUI is not yet complete
