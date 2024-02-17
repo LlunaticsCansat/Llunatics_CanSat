@@ -46,4 +46,6 @@ The microcontroller for our CanSat is an Arduino Nano
 | cansatBrightness      | Float         | LDR sensor                | index between 0~1023  |
 
 # Progress
+The program have a serious problem, it exceeds 31% of Arduino storage space.
+
 Ground station GUI is not yet complete
