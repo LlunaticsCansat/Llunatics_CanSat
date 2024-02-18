@@ -6,7 +6,7 @@ The team is constructed by 5 members, each one focused on the diferent aspects o
 
 # Components
 
-The microcontroller for our CanSat is an Arduino Nano Every, because it have more Flash memory and Ram memory than classic Arduinos, it is necessary to compile our program.
+The microcontroller for our CanSat is an Arduino Nano Every. Because it has more Flash memory and RAM memory than a classic Arduino's, it is necessary to compile our program.
 
 ## Sensors
 | Component Name | Arduino Pin                  | Module Pin                     |
