@@ -6,7 +6,7 @@ The team is constructed by 5 members, each one focused on the diferent aspects o
 
 # Components
 
-The microcontroller for our CanSat is an Arduino Nano Every
+The microcontroller for our CanSat is an Arduino Nano Every, because it have more Flash memory and Ram memory than classic Arduinos, it is necessary to compile our program.
 
 ## Sensors
 | Component Name | Arduino Pin                  | Module Pin                     |
@@ -36,8 +36,8 @@ The microcontroller for our CanSat is an Arduino Nano Every
 | magneticFieldX        | Float         | MPU9250                   | µT                    | 
 | magneticFieldZ        | Float         | MPU9250                   | µT                    | 
 | Yaw                   | Float         | MPU9250                   | degrees               |
-| Pitch                 | Double        | MPU9250                   | degrees               |
-| Roll                  | Double        | MPU9250                   | degrees               |
+| Pitch                 | Float        | MPU9250                   | degrees               |
+| Roll                  | Float        | MPU9250                   | degrees               |
 | mpuTemperature        | Float         | MPU9250                   | ºC                    |
 | latitude              | Float         | NEO-6M GPS                | GCS in degrees        |
 | longitude             | Float         | NEO-6M GPS                | GCS in degrees        |
