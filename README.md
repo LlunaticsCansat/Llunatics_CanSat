@@ -30,10 +30,10 @@ The microcontroller for our CanSat is an Arduino Nano Every. Because it has more
 | accelerationY         | Float         | MPU9250                   | g forces              |
 | accelerationZ         | Float         | MPU9250                   | g forces              |
 | velocityRotationX     | Float         | MPU9250                   | degrees/second        |
-| velocityRotationX     | Float         | MPU9250                   | degrees/second        |
+| velocityRotationY     | Float         | MPU9250                   | degrees/second        |
 | velocityRotationZ     | Float         | MPU9250                   | degrees/second        |
 | magneticFieldX        | Float         | MPU9250                   | µT                    |
-| magneticFieldX        | Float         | MPU9250                   | µT                    | 
+| magneticFieldY        | Float         | MPU9250                   | µT                    | 
 | magneticFieldZ        | Float         | MPU9250                   | µT                    | 
 | Yaw                   | Float         | MPU9250                   | degrees               |
 | Pitch                 | Float        | MPU9250                   | degrees               |
