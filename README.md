@@ -4,6 +4,10 @@ Llunatics is a CanSat, a mini satellite that is the size of a can, designed and 
 
 The team is constructed by 5 members, each one focused on the diferent aspects of the project.
 
+Our [Twitter](https://twitter.com/CansatLlunatics)
+
+Our [Web Site](http://llunatics.cat/)
+
 # Components
 
 The microcontroller for our CanSat is an Arduino Nano Every. Because it has more Flash memory and RAM memory than a classic Arduino's, it is necessary to compile our program.
