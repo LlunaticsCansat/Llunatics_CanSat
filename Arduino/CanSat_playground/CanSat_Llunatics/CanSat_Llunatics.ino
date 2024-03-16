@@ -68,7 +68,7 @@ void setup() {
   {
     dataFile = SD.open("cansatdata.csv", FILE_WRITE);
     if (dataFile) {
-      dataFile.println("time(ms);temperature(Cº);pressure(pa);accelerationX(g forces);accelerationY(g forces);accelerationZ(g forces);velocityRotationX(degrees/second);velocityRotationY(degrees/second);velocityRotationZ(degrees/second);magneticFieldX(µT);magneticFieldY(µT);magneticFieldZ(µT);yaw(degrees);pitch(degrees);roll(degrees);mpuTemperature(Cº);latitude(GCS in degrees);longitude(GCS in degrees);rectennaIntensity(A);rectennaVoltage(V);cansatBrightness(index between 0~1023)");
+      dataFile.println("time;temperature;pressure;accelerationX;accelerationY;accelerationZ;velocityRotationX;velocityRotationY;velocityRotationZ;magneticFieldX;magneticFieldY;magneticFieldZ;yaw;pitch;roll;mpuTemperature;latitude;longitude;rectennaIntensity;rectennaVoltage;cansatBrightness");
       dataFile.close();
     }
   }
