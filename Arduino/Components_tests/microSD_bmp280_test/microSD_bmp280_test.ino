@@ -29,7 +29,18 @@ void setup() {
     return;
   }
   Serial.println(F("Correctly initiated"));
-  
+      
+  if(!SD.exists("datalog.csv"))
+  {
+      dataFile = SD.open("datalog.csv", FILE_WRITE);
+      if (dataFile) {
+        Serial.println("New file, Writing headers(row 1)");
+        dataFile.println("Time(ms),Temperature,Pressure");
+        dataFile.close();
+      } else {
+        Serial.println("Error creating the file datalog.csv");
+      }
+  }
 }
 
 void loop() {
@@ -38,7 +49,7 @@ void loop() {
 
   if (currentTime - countTime >= 1000){
     
-    dataFile = SD.open("bota.txt", FILE_WRITE);
+    dataFile = SD.open("datalog.txt", FILE_WRITE);
     if (dataFile){
         dataFile.print(currentTime);
         dataFile.print(","); 
