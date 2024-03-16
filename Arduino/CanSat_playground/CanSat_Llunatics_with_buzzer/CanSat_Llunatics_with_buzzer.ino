@@ -66,6 +66,16 @@ void setup() {
                 Adafruit_BMP280::STANDBY_MS_500); /* Standby time. */
 
   mpu.setup(0x68);
+
+  if(!SD.exists("cansatdata.csv"))
+  {
+    dataFile = SD.open("cansatdata.csv", FILE_WRITE);
+    if (dataFile) {
+      dataFile.println("time(ms);temperature(Cº);pressure(pa);accelerationX(g forces);accelerationY(g forces);accelerationZ(g forces);velocityRotationX(degrees/second);velocityRotationY(degrees/second);velocityRotationZ(degrees/second);magneticFieldX(µT);magneticFieldY(µT);magneticFieldZ(µT);yaw(degrees);pitch(degrees);roll(degrees);mpuTemperature(Cº);latitude(GCS in degrees);longitude(GCS in degrees);rectennaIntensity(A);rectennaVoltage(V);cansatBrightness(index between 0~1023)");
+      dataFile.close();
+    }
+  }
+    
 }
 
 
@@ -169,7 +179,7 @@ float getIntensity() //Get the Rectenna intensity with ASC712
 
 void backUpData(SensorData Backup){   //Writes data into the microSD
 
-  dataFile = SD.open("cansatdata.txt", FILE_WRITE);
+  dataFile = SD.open("cansatdata.csv", FILE_WRITE);
 
   dataFile.print(Backup.time);
   dataFile.print(F(";"));
