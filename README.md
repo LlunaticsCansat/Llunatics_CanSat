@@ -21,7 +21,8 @@ The microcontroller for our CanSat is an Arduino Nano Every. Because it has more
 | NEO-6M GPS     | [5V, GND, RX0, TX1]          | [VCC, GND, TX, RX]             |
 | ACS712         | [5V, GND, A1]                | [VCC, GND, OUT]                |
 | LDR sensor     | [5V, GND, A0]                |                                |
-| SD Card Reader | [5V, GND, D13, D12, D11, D9] | [5V, GND, SCK, MISO, MOSI, C9] |
+| Buzzer         | [GND, D8]                    |                                |
+| SD Card Reader | [5V, GND, D13, D12, D11, D9] | [5V, GND, SCK, MISO, MOSI, CS] |
 
 # Variables/Datas
 
@@ -40,9 +41,8 @@ The microcontroller for our CanSat is an Arduino Nano Every. Because it has more
 | magneticFieldY        | Float         | MPU9250                   | µT                    | 
 | magneticFieldZ        | Float         | MPU9250                   | µT                    | 
 | Yaw                   | Float         | MPU9250                   | degrees               |
-| Pitch                 | Float        | MPU9250                   | degrees               |
-| Roll                  | Float        | MPU9250                   | degrees               |
-| mpuTemperature        | Float         | MPU9250                   | ºC                    |
+| Pitch                 | Float         | MPU9250                   | degrees               |
+| Roll                  | Float         | MPU9250                   | degrees               |
 | latitude              | Float         | NEO-6M GPS                | GCS in degrees        |
 | longitude             | Float         | NEO-6M GPS                | GCS in degrees        |
 | rectennaIntensity     | Float         | ACS712                    | A                     |
