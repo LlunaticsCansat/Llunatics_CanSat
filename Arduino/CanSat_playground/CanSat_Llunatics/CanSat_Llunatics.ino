@@ -6,6 +6,8 @@
 #include <SD.h>               //For the SD module
 #include "MPU9250.h"          //Gyroscope, compass and acceleration library
 
+
+
 struct SensorData {               //Create a struct that contains all the dates
     unsigned long time = ULONG_MAX;
     float temperature = NAN;
@@ -22,7 +24,6 @@ struct SensorData {               //Create a struct that contains all the dates
     float Yaw = NAN;
     float Pitch = NAN;
     float Roll = NAN;
-    float mpuTemperature = NAN;
     float latitude = NAN;
     float longitude = NAN;
     float rectennaIntensity = NAN;
@@ -30,8 +31,10 @@ struct SensorData {               //Create a struct that contains all the dates
     float cansatBrightness = NAN;
 };
 
-const int RadioRX = 7;7
+
+const int RadioRX = 7;
 const int RadioTX = 6;
+
 
 TinyGPSPlus gps;
 
@@ -49,31 +52,35 @@ unsigned long countTime = millis();
 
 void setup() {
   
-  Serial.begin(9600); //The GPS will be connected to Serial to optimize the gobal variable space
+  Serial1.begin(9600); //The GPS will be connected to Serial1 to optimize the gobal variable space
   Wire.begin();
   radio.begin(9600);
   radio.println(F("Initialitzating CanSat"));
 
   bmp.begin(0x76); // BMP280 Pressure and temperature sensor
   bmp.setSampling(Adafruit_BMP280::MODE_NORMAL,     /* Operating Mode. */
-                Adafruit_BMP280::SAMPLING_X2,     /* Temp. oversampling */
-                Adafruit_BMP280::SAMPLING_X16,    /* Pressure oversampling */
-                Adafruit_BMP280::FILTER_X16,      /* Filtering. */
-                Adafruit_BMP280::STANDBY_MS_500); /* Standby time. */
+                  Adafruit_BMP280::SAMPLING_X2,     /* Temp. oversampling */
+                  Adafruit_BMP280::SAMPLING_X16,    /* Pressure oversampling */
+                  Adafruit_BMP280::FILTER_X16,      /* Filtering. */
+                  Adafruit_BMP280::STANDBY_MS_500); /* Standby time. */
 
   mpu.setup(0x68);
-
-
+  
+  if (!SD.begin(9))
+  {
+    radio.println(F("Error at startup SD"));
+    return;
+  }
+  
   if(!SD.exists("cansatdata.csv"))
   {
     dataFile = SD.open("cansatdata.csv", FILE_WRITE);
     if (dataFile) {
-      dataFile.println("time;temperature;pressure;accelerationX;accelerationY;accelerationZ;velocityRotationX;velocityRotationY;velocityRotationZ;magneticFieldX;magneticFieldY;magneticFieldZ;yaw;pitch;roll;mpuTemperature;latitude;longitude;rectennaIntensity;rectennaVoltage;cansatBrightness");
+      dataFile.println("time;temperature;pressure;accelerationX;accelerationY;accelerationZ;velocityRotationX;velocityRotationY;velocityRotationZ;magneticFieldX;magneticFieldY;magneticFieldZ;yaw;pitch;roll;latitude;longitude;rectennaIntensity;rectennaVoltage;cansatBrightness");
+        
       dataFile.close();
     }
   }
-
-
 }
 
 
@@ -81,7 +88,7 @@ void loop() {
   
   unsigned long currentTime = millis();
   
-  float AccX, AccY, AccZ, GyroX, GyroY, GyroZ, MagX, MagY, MagZ, Yaw, Pitch, Roll, MpuTemp;
+  float AccX, AccY, AccZ, GyroX, GyroY, GyroZ, MagX, MagY, MagZ, Yaw, Pitch, Roll;
 
   if (mpu.update()) {
     AccX = mpu.getAccX();
@@ -96,12 +103,11 @@ void loop() {
     Yaw = mpu.getYaw();
     Pitch = mpu.getPitch();
     Roll = mpu.getRoll();
-    MpuTemp = mpu.getTemperature();
     }
 
-  while (Serial.available() > 0) {
+  while (Serial1.available() > 0) {
     
-    if (gps.encode(Serial.read())) {
+    if (gps.encode(Serial1.read())) {
       
       if (gps.location.isValid()) {
         
@@ -113,7 +119,7 @@ void loop() {
   }
 
   if (currentTime - countTime >= 1000){   
-    SensorData currentSensorData = CollectSensorData(currentTime, AccX, AccY, AccZ, GyroX, GyroY, GyroZ, MagX, MagY, MagZ, Yaw, Pitch, Roll, MpuTemp, latitude, longitude);
+    SensorData currentSensorData = CollectSensorData(currentTime, latitude, longitude, AccX, AccY, AccZ, GyroX, GyroY, GyroZ, MagX, MagY, MagZ, Yaw, Pitch, Roll);
     backUpData(currentSensorData);
     sendData(currentSensorData);
     countTime = currentTime;
@@ -122,7 +128,7 @@ void loop() {
 }
 
 
-SensorData CollectSensorData(unsigned long currentTime, float currentLatidude, float currentLongitude, float AccX, float AccY, float AccZ, float GyroX, float GyroY, float GyroZ, float MagX, float MagY, float MagZ, float Yaw, float Pitch, float Roll, float MpuTemp) { //Collect dates from the sensors (exept Gps and MPU9250)
+SensorData CollectSensorData(unsigned long currentTime, float currentLatidude, float currentLongitude, float AccX, float AccY, float AccZ, float GyroX, float GyroY, float GyroZ, float MagX, float MagY, float MagZ, float Yaw, float Pitch, float Roll) { //Collect dates from the sensors (exept Gps and MPU9250)
 
     SensorData currentSensorData;
 
@@ -141,7 +147,6 @@ SensorData CollectSensorData(unsigned long currentTime, float currentLatidude, f
     currentSensorData.Yaw = Yaw;
     currentSensorData.Pitch = Pitch;
     currentSensorData.Roll = Roll;
-    currentSensorData.mpuTemperature = MpuTemp;
     currentSensorData.latitude = currentLatidude; //GPS
     currentSensorData.longitude = currentLongitude;
     currentSensorData.rectennaIntensity = getIntensity(); //ACS712
@@ -204,12 +209,9 @@ void backUpData(SensorData Backup){   //Writes data into the microSD
   dataFile.print(Backup.Roll);
   dataFile.print(F(";"));
 
-  dataFile.print(Backup.mpuTemperature);
+  dataFile.print(Backup.latitude,6);
   dataFile.print(F(";"));
-
-  dataFile.print(Backup.latitude);
-  dataFile.print(F(";"));
-  dataFile.print(Backup.longitude);
+  dataFile.print(Backup.longitude,6);
   dataFile.print(F(";"));
 
   dataFile.print(Backup.rectennaIntensity);
@@ -230,9 +232,9 @@ void sendData(SensorData Data){ //send data to ground station with APC220
   radio.print(F(","));
   radio.print(Data.time);
   radio.print(F(","));
-  radio.print(Data.pressure);
-  radio.print(F(","));
   radio.print(Data.temperature);
+  radio.print(F(","));
+  radio.print(Data.pressure);
   radio.print(F(","));
 
   radio.print(Data.accelerationX);
@@ -263,12 +265,9 @@ void sendData(SensorData Data){ //send data to ground station with APC220
   radio.print(Data.Roll);
   radio.print(F(","));
 
-  radio.print(Data.mpuTemperature);
+  radio.print(Data.latitude,6);
   radio.print(F(","));
-
-  radio.print(Data.latitude);
-  radio.print(F(","));
-  radio.print(Data.longitude);
+  radio.print(Data.longitude,6);
   radio.print(F(","));
 
   radio.print(Data.rectennaIntensity);
