@@ -45,7 +45,6 @@ The microcontroller for our CanSat is an Arduino Nano Every. Because it has more
 | Roll                  | Float         | MPU9250                   | degrees               |
 | latitude              | Float         | NEO-6M GPS                | GCS in degrees        |
 | longitude             | Float         | NEO-6M GPS                | GCS in degrees        |
-| rectennaIntensity     | Float         | ACS712                    | A                     |
 | rectennaVoltage       | Float         | Arduino analog Pin        | V                     | 
 | cansatBrightness      | Float         | LDR sensor                | index between 0~1023  |
 
