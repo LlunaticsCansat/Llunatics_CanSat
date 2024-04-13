@@ -19,7 +19,6 @@ The microcontroller for our CanSat is an Arduino Nano Every. Because it has more
 | BMP280         | [3V3, GND, A5, A4]           | [VCC, GND, SCL, SDA]           |
 | MPU9250        | [3V3, GND, A5, A4]           | [VCC, GND, SCL, SDA]           |
 | NEO-6M GPS     | [5V, GND, RX0, TX1]          | [VCC, GND, TX, RX]             |
-| ACS712         | [5V, GND, A1]                | [VCC, GND, OUT]                |
 | LDR sensor     | [5V, GND, A0]                |                                |
 | Buzzer         | [GND, D8]                    |                                |
 | SD Card Reader | [5V, GND, D13, D12, D11, D9] | [5V, GND, SCK, MISO, MOSI, CS] |
