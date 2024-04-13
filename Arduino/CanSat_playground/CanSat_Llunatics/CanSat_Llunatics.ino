@@ -12,6 +12,7 @@ struct SensorData {               //Create a struct that contains all the dates
     unsigned long time = ULONG_MAX;
     float temperature = NAN;
     float pressure = NAN;
+    float altitude = NAN;
     float accelerationX = NAN;
     float accelerationY = NAN;
     float accelerationZ = NAN;
@@ -72,11 +73,11 @@ void setup() {
     return;
   }
   
-  if(!SD.exists("cansatdata.csv"))
+  if(!SD.exists("cansat.csv"))
   {
-    dataFile = SD.open("cansatdata.csv", FILE_WRITE);
+    dataFile = SD.open("cansat.csv", FILE_WRITE);
     if (dataFile) {
-      dataFile.println("time;temperature;pressure;accelerationX;accelerationY;accelerationZ;velocityRotationX;velocityRotationY;velocityRotationZ;magneticFieldX;magneticFieldY;magneticFieldZ;yaw;pitch;roll;latitude;longitude;rectennaIntensity;rectennaVoltage;cansatBrightness");
+      dataFile.println("time,temperature,pressure,altitude,accelerationX,accelerationY,accelerationZ,velocityRotationX,velocityRotationY,velocityRotationZ,magneticFieldX,magneticFieldY,magneticFieldZ,yaw,pitch,roll,latitude,longitude,rectennaVoltage,cansatBrightness");
         
       dataFile.close();
     }
@@ -135,6 +136,7 @@ SensorData CollectSensorData(unsigned long currentTime, float currentLatidude, f
     currentSensorData.time = currentTime; 
     currentSensorData.temperature = bmp.readTemperature(); // BMP280: Temperature
     currentSensorData.pressure = bmp.readPressure(); // BMP280: Pressure
+    currentSensorData.altitude = bmp.readAltitude(1013.25); // BMP280: Altitude
     currentSensorData.accelerationX = AccX; //MPU9250
     currentSensorData.accelerationY = AccY;
     currentSensorData.accelerationZ = AccZ;
@@ -164,60 +166,60 @@ float getIntensity() //Get the Rectenna intensity with ASC712
   for (int i = 0; i < samplesNumber; i++)
   {
     voltage = analogRead(A1) * 5.0 / 1023.0;
-    currentSum += (voltage - 2.5) / 0.066;
+    currentSum += (voltage - 2.5) / 0.100;
   }
   return(currentSum / samplesNumber);
 }
 
 void backUpData(SensorData Backup){   //Writes data into the microSD
 
-  dataFile = SD.open("cansatdata.csv", FILE_WRITE);
+  dataFile = SD.open("cansat.csv", FILE_WRITE);
 
   dataFile.print(Backup.time);
-  dataFile.print(F(";"));
+  dataFile.print(F(","));
   
   dataFile.print(Backup.temperature);
-  dataFile.print(F(";"));
+  dataFile.print(F(","));
   dataFile.print(Backup.pressure);
-  dataFile.print(F(";"));
+  dataFile.print(F(","));
+  dataFile.print(Backup.altitude);
+  dataFile.print(F(","));
 
   dataFile.print(Backup.accelerationX);
-  dataFile.print(F(";"));
+  dataFile.print(F(","));
   dataFile.print(Backup.accelerationY);
-  dataFile.print(F(";"));
+  dataFile.print(F(","));
   dataFile.print(Backup.accelerationZ);
-  dataFile.print(F(";"));
+  dataFile.print(F(","));
 
   dataFile.print(Backup.velocityRotationX);
-  dataFile.print(F(";"));
+  dataFile.print(F(","));
   dataFile.print(Backup.velocityRotationY);
-  dataFile.print(F(";"));
+  dataFile.print(F(","));
   dataFile.print(Backup.velocityRotationZ);  
-  dataFile.print(F(";"));
+  dataFile.print(F(","));
 
   dataFile.print(Backup.magneticFieldX);
-  dataFile.print(F(";"));
+  dataFile.print(F(","));
   dataFile.print(Backup.magneticFieldY);
-  dataFile.print(F(";"));
+  dataFile.print(F(","));
   dataFile.print(Backup.magneticFieldZ);  
-  dataFile.print(F(";"));
+  dataFile.print(F(","));
 
   dataFile.print(Backup.Yaw);
-  dataFile.print(F(";"));
+  dataFile.print(F(","));
   dataFile.print(Backup.Pitch);
-  dataFile.print(F(";"));
+  dataFile.print(F(","));
   dataFile.print(Backup.Roll);
-  dataFile.print(F(";"));
+  dataFile.print(F(","));
 
   dataFile.print(Backup.latitude,6);
-  dataFile.print(F(";"));
+  dataFile.print(F(","));
   dataFile.print(Backup.longitude,6);
-  dataFile.print(F(";"));
+  dataFile.print(F(","));
 
-  dataFile.print(Backup.rectennaIntensity);
-  dataFile.print(F(";"));
   dataFile.print(Backup.rectennaVoltage);
-  dataFile.print(F(";"));
+  dataFile.print(F(","));
 
   dataFile.println(Backup.cansatBrightness);
 
@@ -236,7 +238,9 @@ void sendData(SensorData Data){ //send data to ground station with APC220
   radio.print(F(","));
   radio.print(Data.pressure);
   radio.print(F(","));
-
+  radio.print(Data.altitude);
+  radio.print(F(","));
+  
   radio.print(Data.accelerationX);
   radio.print(F(","));
   radio.print(Data.accelerationY);
@@ -270,8 +274,6 @@ void sendData(SensorData Data){ //send data to ground station with APC220
   radio.print(Data.longitude,6);
   radio.print(F(","));
 
-  radio.print(Data.rectennaIntensity);
-  radio.print(F(","));
   radio.print(Data.rectennaVoltage);
   radio.print(F(","));
 
