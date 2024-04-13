@@ -31,6 +31,7 @@ The microcontroller for our CanSat is an Arduino Nano Every. Because it has more
 | time                  | Unsigned Long | Arduino Power-on Timer    | ms                    |
 | temperature           | Float         | BMP280                    | ºC                    |
 | pressure              | Float         | BMP280                    | pa                    |
+| altitude              | Float         | BMP280                    | m                     |
 | accelerationX         | Float         | MPU9250                   | g forces              |
 | accelerationY         | Float         | MPU9250                   | g forces              |
 | accelerationZ         | Float         | MPU9250                   | g forces              |
