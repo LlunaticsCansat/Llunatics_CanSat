@@ -27,7 +27,6 @@ struct SensorData {               //Create a struct that contains all the dates
     float Roll = NAN;
     float latitude = NAN;
     float longitude = NAN;
-    float rectennaIntensity = NAN;
     float rectennaVoltage = NAN;
     float cansatBrightness = NAN;
 };
@@ -151,25 +150,12 @@ SensorData CollectSensorData(unsigned long currentTime, float currentLatidude, f
     currentSensorData.Roll = Roll;
     currentSensorData.latitude = currentLatidude; //GPS
     currentSensorData.longitude = currentLongitude;
-    currentSensorData.rectennaIntensity = getIntensity(); //ACS712
     currentSensorData.rectennaVoltage = analogRead(A2) /1023 * 5.0; //Arduino
     currentSensorData.cansatBrightness = analogRead(A0); //Photoresistor
 
     return currentSensorData;
 }
 
-float getIntensity() //Get the Rectenna intensity with ASC712
-{
-  int samplesNumber = 100;
-  float voltage;
-  float currentSum = 0;
-  for (int i = 0; i < samplesNumber; i++)
-  {
-    voltage = analogRead(A1) * 5.0 / 1023.0;
-    currentSum += (voltage - 2.5) / 0.100;
-  }
-  return(currentSum / samplesNumber);
-}
 
 void backUpData(SensorData Backup){   //Writes data into the microSD
 
