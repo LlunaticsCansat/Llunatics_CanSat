@@ -47,7 +47,3 @@ The microcontroller for our CanSat is an Arduino Nano Every. Because it has more
 | longitude             | Float         | NEO-6M GPS                | GCS in degrees        |
 | rectennaVoltage       | Float         | Arduino analog Pin        | V                     | 
 | cansatBrightness      | Float         | LDR sensor                | index between 0~1023  |
-
-# Progress
-
-Ground station GUI is not yet complete
